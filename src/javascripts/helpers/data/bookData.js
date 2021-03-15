@@ -6,8 +6,8 @@ import firebaseConfig from '../auth/apiKeys';
 const dbUrl = firebaseConfig.databaseURL;
 
 // GET BOOKS
-const getBooks = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/books.json?orderBy="uid"&equalTo="${userId}"`)
+const getBooks = (uid) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="uid"&equalTo="${uid}"`)
     .then((response) => {
       if (response.data) {
         resolve(Object.values(response.data));

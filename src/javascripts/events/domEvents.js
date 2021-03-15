@@ -52,7 +52,7 @@ const domEvents = (userId) => {
     }
 
     // ADD CLICK EVENT FOR SHOWING FORM FOR ADDING AN AUTHOR
-    if (e.target.id.includes('add-auth-btn')) {
+    if (e.target.id.includes('add-author-btn')) {
       addAuthorForm();
     }
 

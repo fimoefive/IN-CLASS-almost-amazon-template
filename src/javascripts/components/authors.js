@@ -1,7 +1,7 @@
 // FIXME: STUDENTS show your authors
 
 const showAuthors = (array) => {
-  document.querySelector('#add-button').innerHTML = '<button class="btn btn-success btn-lg mb-4" id="add-author-btn">Add A Author</button>';
+  document.querySelector('#add-button').innerHTML = '<button class="btn btn-success btn-lg mb-4" id="add-author-btn">Add An Author</button>';
 
   document.querySelector('#store').innerHTML = '';
   document.querySelector('#form-container').innerHTML = '';
@@ -23,9 +23,9 @@ const showAuthors = (array) => {
 };
 
 const emptyAuthors = () => {
-  document.querySelector('#store').innerHTML = '<h1>No Authors</h1>';
-  document.querySelector('#store').innerHTML = '';
+  document.querySelector('#add-button').innerHTML = '<button class="btn btn-success btn-lg mb-4" id="add-author-btn">Add An Author</button>';
   document.querySelector('#form-container').innerHTML = '';
+  document.querySelector('#store').innerHTML = '<h1>No Authors</h1>';
 };
 
 export { showAuthors, emptyAuthors };
