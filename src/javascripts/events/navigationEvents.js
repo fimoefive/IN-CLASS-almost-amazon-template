@@ -1,24 +1,37 @@
+import 'firebase/auth';
 import signOut from '../helpers/auth/signOut';
-import { getAuthors } from '../helpers/data/authorData';
-import { showAuthors } from '../components/authors';
-import { getBooks } from '../helpers/data/bookData';
-import { showBooks } from '../components/books';
+import { getBooks, getSaleBooks } from '../helpers/data/bookData';
+import { getAuthors, getFavoriteAuthors } from '../helpers/data/authorData';
+import { showBooks, emptyBooks } from '../components/books';
+import { showAuthors, emptyAuthors } from '../components/authors';
 
 // navigation events
-const navigationEvents = () => {
+const navigationEvents = (userId) => {
   // LOGOUT BUTTON
   document.querySelector('#logout-button')
     .addEventListener('click', signOut);
 
-  // BOOKS ON SALE
-  document.querySelector('#sale-books').addEventListener('click', () => {
-    console.warn('Sale Books');
-  });
-
   // ALL BOOKS
   document.querySelector('#all-books').addEventListener('click', () => {
     // Get ALL Books on click
-    getBooks().then((booksArray) => showBooks(booksArray));
+    getBooks(userId).then((booksArray) => {
+      if (booksArray.length) {
+        showBooks(booksArray);
+      } else {
+        emptyBooks();
+      }
+    });
+  });
+
+  // BOOKS ON SALE
+  document.querySelector('#sale-books').addEventListener('click', () => {
+    getSaleBooks().then((saleBooksArray) => {
+      if (saleBooksArray.length) {
+        showBooks(saleBooksArray);
+      } else {
+        emptyBooks();
+      }
+    });
   });
 
   // SEARCH
@@ -38,17 +51,29 @@ const navigationEvents = () => {
 
   // FIXME: STUDENTS Create an event listener for the Authors
   // 1. When a user clicks the authors link, make a call to firebase to get all authors
-  document.querySelector('#store').addEventListener('click', () => {
-    // console.warn('All Authors');
-    getAuthors().then((booksArray) => showAuthors(booksArray));
-  });
   // 2. Convert the response to an array because that is what the makeAuthors function is expecting
-
   // 3. If the array is empty because there are no authors, make sure to use the emptyAuthor function
-};
+  document.querySelector('#authors').addEventListener('click', () => {
+    // console.warn('All Authors');
+    getAuthors(userId).then((authorArray) => {
+      if (authorArray.length) {
+        showAuthors(authorArray);
+      } else {
+        emptyAuthors();
+      }
+    });
+  });
 
-export const emptyAuthors = () => {
-  document.querySelector('#authors').innerHTML = '<h1>No Items</h1>';
+  // FAVORITE AUTHORS
+  document.querySelector('#favorite-authors').addEventListener('click', () => {
+    getFavoriteAuthors().then((favoriteAuthorsArray) => {
+      if (favoriteAuthorsArray.length) {
+        showAuthors(favoriteAuthorsArray);
+      } else {
+        emptyAuthors();
+      }
+    });
+  });
 };
 
 export default navigationEvents;
