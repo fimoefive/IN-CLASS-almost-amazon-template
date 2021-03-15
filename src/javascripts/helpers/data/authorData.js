@@ -1,11 +1,13 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import axios from 'axios';
 import firebaseConfig from '../auth/apiKeys';
 // API CALLS FOR AUTHORS
 const dbUrl = firebaseConfig.databaseURL;
 
 // GET AUTHORS
-const getAuthors = (uid) => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${uid}"`)
+const getAuthors = (userId) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${userId}"`)
     .then((response) => {
       if (response.data) {
         resolve(Object.values(response.data));
@@ -50,9 +52,9 @@ const createAuthors = (authorObject, uid) => new Promise((resolve, reject) => {
 });
 
 // UPDATE AUTHOR
-const updateAuthor = () => new Promise((resolve, reject) => {
-  axios.patch(`${dbUrl}/authors.json`)
-    .then((response) => resolve(Object.values(response.data)))
+const updateAuthor = (firebaseKey, authorObj) => new Promise((resolve, reject) => {
+  axios.patch(`${dbUrl}/authors/${firebaseKey}.json`, authorObj)
+    .then(() => getAuthors(firebase.auth().currentUser.uid)).then((authorsArray) => resolve(authorsArray))
     .catch((error) => reject(error));
 });
 

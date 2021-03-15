@@ -1,12 +1,12 @@
-import { emptyAuthors, showAuthors } from '../components/authors';
-import { emptyBooks, showBooks } from '../components/books';
+import { showAuthors, emptyAuthors } from '../components/authors';
+import { showBooks, emptyBooks } from '../components/books';
 import logoutButton from '../components/buttons/logoutButton';
 import domBuilder from '../components/domBuilder';
 import navBar from '../components/navBar';
 import domEvents from '../events/domEvents';
 import navigationEvents from '../events/navigationEvents';
-import { getAuthors } from '../helpers/data/authorData';
 import { getBooks } from '../helpers/data/bookData';
+import { getAuthors } from '../helpers/data/authorData';
 
 const startApp = (userObject) => {
   domBuilder(); // BUILD THE DOM
