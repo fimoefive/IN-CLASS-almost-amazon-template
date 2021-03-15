@@ -1,6 +1,7 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import axios from 'axios';
 import firebaseConfig from '../auth/apiKeys';
-
 // API CALLS FOR BOOKS
 const dbUrl = firebaseConfig.databaseURL;
 
@@ -15,20 +16,35 @@ const getBooks = (uid) => new Promise((resolve, reject) => {
       }
     }).catch((error) => reject(error));
 });
-// DELETE BOOK
-const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
-  axios.delete(`${dbUrl}/books/${firebaseKey}.json`)
-    .then(() => getBooks().then((booksArray) => resolve(booksArray)))
+
+// GET SINGLE BOOK
+const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books/${firebaseKey}.json`)
+    .then((response) => resolve(response.data))
     .catch((error) => reject(error));
 });
 
-// SALE BOOKS
+// GET SALE BOOKS
 const getSaleBooks = () => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/books.json?orderBy="sale"&equalTo=true`)
     .then((response) => {
       const saleBooksArray = Object.values(response.data);
       resolve(saleBooksArray);
     }).catch((error) => reject(error));
+});
+
+// GET ALL AUTHORS BOOKS
+const getAuthorBooks = (authorId) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${authorId}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch((error) => reject(error));
+});
+
+// DELETE BOOK
+const deleteBook = (firebaseKey, uid) => new Promise((resolve, reject) => {
+  axios.delete(`${dbUrl}/books/${firebaseKey}.json`)
+    .then(() => getBooks(uid).then((booksArray) => resolve(booksArray)))
+    .catch((error) => reject(error));
 });
 
 // CREATE BOOK
@@ -44,13 +60,22 @@ const createBook = (bookObject, uid) => new Promise((resolve, reject) => {
 });
 
 // UPDATE BOOK
-const updateBooks = () => new Promise((resolve, reject) => {
-  axios.patch(`${dbUrl}/books.json`)
-    .then((response) => resolve(Object.values(response.data)))
+const updateBooks = (firebaseKey, bookObj) => new Promise((resolve, reject) => {
+  axios.patch(`${dbUrl}/books/${firebaseKey}.json`, bookObj)
+    .then(() => getBooks(firebase.auth().currentUser.uid))
+    .then((booksArray) => resolve(booksArray))
     .catch((error) => reject(error));
 });
+
 // SEARCH BOOKS
+const searchBooks = (searchValue) => new Promise((resolve, reject) => {
+  getBooks().then((booksArray) => {
+    const search = booksArray.filter((book) => book.title.toLowercase().includes(searchValue));
+    resolve(search);
+  }).catch((error) => reject(error));
+});
+
 export {
-  getBooks, createBook, updateBooks,
-  deleteBook, getSaleBooks
+  getBooks, createBook, deleteBook, updateBooks,
+  getSaleBooks, getSingleBook, getAuthorBooks, searchBooks
 };
