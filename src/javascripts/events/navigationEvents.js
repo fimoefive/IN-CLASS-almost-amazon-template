@@ -3,7 +3,7 @@ import signOut from '../helpers/auth/signOut';
 import { getBooks, getSaleBooks } from '../helpers/data/bookData';
 import { getAuthors, getFavoriteAuthors } from '../helpers/data/authorData';
 import { showBooks, emptyBooks } from '../components/books';
-import { showAuthors, emptyAuthors } from '../components/authors';
+import { showAuthors, emptyAuthors, emptyFavoriteAuthor } from '../components/authors';
 
 // navigation events
 const navigationEvents = (userId) => {
@@ -66,11 +66,11 @@ const navigationEvents = (userId) => {
 
   // FAVORITE AUTHORS
   document.querySelector('#favorite-authors').addEventListener('click', () => {
-    getFavoriteAuthors().then((favoriteAuthorsArray) => {
-      if (favoriteAuthorsArray.length) {
-        showAuthors(favoriteAuthorsArray);
+    getFavoriteAuthors().then((favoritesArray) => {
+      if (favoritesArray.length) {
+        showAuthors(favoritesArray);
       } else {
-        emptyAuthors();
+        emptyFavoriteAuthor();
       }
     });
   });
