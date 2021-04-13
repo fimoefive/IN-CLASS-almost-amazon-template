@@ -1,4 +1,4 @@
-import 'firebase/auth';
+// import 'firebase/auth';
 import signOut from '../helpers/auth/signOut';
 import { getBooks, getSaleBooks } from '../helpers/data/bookData';
 import { getAuthors, getFavoriteAuthors } from '../helpers/data/authorData';
@@ -6,15 +6,15 @@ import { showBooks, emptyBooks } from '../components/books';
 import { showAuthors, emptyAuthors, emptyFavoriteAuthor } from '../components/authors';
 
 // navigation events
-const navigationEvents = (userId) => {
+const navigationEvents = (uid) => {
   // LOGOUT BUTTON
   document.querySelector('#logout-button')
     .addEventListener('click', signOut);
 
   // ALL BOOKS
   document.querySelector('#all-books').addEventListener('click', () => {
-    // Get ALL Books on click
-    getBooks(userId).then((booksArray) => {
+    // Get ALL Books on Click
+    getBooks(uid).then((booksArray) => {
       if (booksArray.length) {
         showBooks(booksArray);
       } else {
@@ -30,6 +30,28 @@ const navigationEvents = (userId) => {
         showBooks(saleBooksArray);
       } else {
         emptyBooks();
+      }
+    });
+  });
+
+  // ALL AUTHORS
+  document.querySelector('#authors').addEventListener('click', () => {
+    getAuthors(uid).then((authorsArray) => {
+      if (authorsArray.length) {
+        showAuthors(authorsArray);
+      } else {
+        emptyAuthors();
+      }
+    });
+  });
+
+  // FAVORITE AUTHORS
+  document.querySelector('#favorite-authors').addEventListener('click', () => {
+    getFavoriteAuthors().then((favoritesArray) => {
+      if (favoritesArray.length) {
+        showAuthors(favoritesArray);
+      } else {
+        emptyFavoriteAuthor();
       }
     });
   });
@@ -53,27 +75,6 @@ const navigationEvents = (userId) => {
   // 1. When a user clicks the authors link, make a call to firebase to get all authors
   // 2. Convert the response to an array because that is what the makeAuthors function is expecting
   // 3. If the array is empty because there are no authors, make sure to use the emptyAuthor function
-  document.querySelector('#authors').addEventListener('click', () => {
-    // console.warn('All Authors');
-    getAuthors(userId).then((authorArray) => {
-      if (authorArray.length) {
-        showAuthors(authorArray);
-      } else {
-        emptyAuthors();
-      }
-    });
-  });
-
-  // FAVORITE AUTHORS
-  document.querySelector('#favorite-authors').addEventListener('click', () => {
-    getFavoriteAuthors().then((favoritesArray) => {
-      if (favoritesArray.length) {
-        showAuthors(favoritesArray);
-      } else {
-        emptyFavoriteAuthor();
-      }
-    });
-  });
 };
 
 export default navigationEvents;
