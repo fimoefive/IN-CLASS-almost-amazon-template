@@ -35,7 +35,7 @@ const getSaleBooks = () => new Promise((resolve, reject) => {
 
 // GET ALL AUTHORS BOOKS
 const getAuthorBooks = (authorId) => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${authorId}"`)
+  axios.get(`${dbUrl}/books.json?orderBy="authorId"&equalTo="${authorId}"`)
     .then((response) => resolve(Object.values(response.data)))
     .catch((error) => reject(error));
 });

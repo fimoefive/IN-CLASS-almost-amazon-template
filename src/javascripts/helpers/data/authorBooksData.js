@@ -1,5 +1,5 @@
-import { deleteAuthor, getSingleAuthor } from './authorData';
 import { deleteBook, getAuthorBooks } from './bookData';
+import { deleteAuthor, getSingleAuthor } from './authorData';
 
 // DELETE AUTHOR AND ALL THEIR BOOKS
 const deleteAuthorBooks = (authorId, uid) => new Promise((resolve, reject) => {
@@ -10,17 +10,12 @@ const deleteAuthorBooks = (authorId, uid) => new Promise((resolve, reject) => {
 });
 
 const authorBookInfo = (authorId) => new Promise((resolve, reject) => {
-  Promise.all([getSingleAuthor(authorId), getAuthorBooks(authorId)])
-    .then(([taco, burrito]) => resolve({ author: taco, books: burrito }))
+  const author = getSingleAuthor(authorId);
+  const authorBooks = getAuthorBooks(authorId);
+  Promise.all([author, authorBooks])
+    .then(([authorResponse, authorBooksResponse]) => resolve({ author: authorResponse, books: authorBooksResponse }))
+    // same as { author: response[0], books: response[1]}
     .catch((error) => reject(error));
 });
-
-// const authorBookInfo = (authorId) => new Promise((resolve, reject) => {
-//   const author = getSingleAuthor(authorId);
-//   const authorBooks = getAuthorBooks(authorId);
-//   Promise.all([author, authorBooks])
-//     .then([authorResponse, authorBooksResponse]) => resolve([author: authorResponse, books: authorResponse]);
-//     .catch((error) => reject(error));
-// });
 
 export { deleteAuthorBooks, authorBookInfo };
